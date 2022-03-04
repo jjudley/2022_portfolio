@@ -1,0 +1,394 @@
+select * from `new-york-taxi-trips-342523.taxi_project.trip_data` limit 10
+
+
+
+-- Content -- 
+-- Business Objective 
+-- Data Cleaning (outliers, null values (impute or no), correlation analysis  )
+-- EDA 
+
+
+
+
+-- Business Question 
+
+-- maximize total amount received per ride
+-- pickup passengers at popular lcoatiosn 
+
+
+-- Data Cleaning 
+
+-- Check Nulls (will I impute or remove)  
+-- Check range (for outliers) 
+-- Summary Stastics on important columns 
+-- Correlation 
+
+
+select count(*) 
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+-- VendorID --
+select count(distinct VendorID) 
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+-- Theres two types of Vendors
+
+
+-- DateTime Columns-- 
+
+-- Check if our Timestamps contain null values 
+select count(*)
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where tpep_dropoff_datetime  is null 
+
+select count(*)
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where tpep_dropoff_datetime is null
+
+
+
+-- Calculate duration of ride and add to table 
+
+select tpep_pickup_datetime, 
+       tpep_dropoff_datetime, 
+       TIMESTAMP_DIFF(tpep_dropoff_datetime, tpep_pickup_datetime,  minute) as time_diff_minutes 
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+
+select * 
+from `new-york-taxi-trips-342523.taxi_project.trip_data` limit 10
+
+
+-- Each Month 
+ select EXTRACT(month FROM tpep_pickup_datetime AT TIME ZONE "UTC") AS month_utc
+ from `new-york-taxi-trips-342523.taxi_project.trip_data`
+ group by month_utc
+ order by month_utc
+
+
+
+
+
+/* Filtering data to only include rides within Janurary 2021 */ 
+
+ select EXTRACT(year FROM tpep_pickup_datetime AT TIME ZONE "UTC") AS year
+ from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where EXTRACT(year FROM tpep_pickup_datetime AT TIME ZONE "UTC") = '2021'
+
+
+-- I may have to update to ADD a Year Column 
+
+
+
+
+ -- Passenger Count 
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where passenger_count is null
+
+select *
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where passenger_count is null
+
+-- Trip Distance 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where trip_distance  is null
+
+
+select * from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+-- Null contained in 
+/* RatecodeID, store flag, payment type */
+
+-- RatecodeID 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where RatecodeID  is null
+
+-- 98352 null values 
+
+
+select count(distinct RatecodeID) 
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+
+
+
+
+-- store_and_fwd_flag 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where store_and_fwd_flag  is null
+
+-- 98352 null values 
+
+-- PULocationID 
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where PULocationID  is null
+
+-- DOLocationID 
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where DOLocationID  is null
+
+-- 0 null values 
+
+-- payment_type
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where payment_type is null
+
+-- 98352 null values 
+
+--fare_amount
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where fare_amount is null
+
+
+-- 0 null values 
+
+
+-- extra 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where extra is null
+
+-- 0 null values 
+
+
+-- mta_tax 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where mta_tax  is null
+
+-- 0 null values 
+
+-- tip_amount 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where tip_amount is null
+
+-- 0 null values 
+
+-- tolls_amount
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where tolls_amount is null
+
+-- 0 null values 
+
+-- improvement_surcharge 
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where improvement_surcharge  is null
+
+-- 0 null values 
+
+-- total_amount 
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where total_amount is null
+
+-- 0 null values 
+
+--congestion surcharge 
+
+select count(*)  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where congestion_surcharge is null
+
+-- 0 null values 
+
+
+
+-- Next Steps  
+
+-- range of values 
+-- identify outliers 
+
+-- 
+select * from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+select distinct RatecodeID  
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+
+
+
+-- Range of values-- 
+
+-- passenger count, trip distnace, PU location, DO location, payment type, total amount, tip amount optional 
+
+-- passenger count 
+select passenger_count, count(*)
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+group by passenger_count 
+order by 2 desc
+
+-- 258 locations 
+select count(distinct PULocationID)
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+-- 260 different locations 
+select count(distinct DOLocationID)
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+-- tip and trip amount need further anaylsis 
+select trip_distance
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+select total_amount 
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+
+
+
+
+
+
+---- Identify Outliers ---- 
+-- trip_distance, total_amount
+
+
+-- Outlier in trip distance by day 
+
+
+
+
+
+
+SELECT
+	age_quartile,
+	MAX(age) AS quartile_break
+FROM(
+	SELECT
+    	full_name,
+		age,
+		NTILE(4) OVER (ORDER BY age) AS age_quartile
+	FROM friends) AS quartiles
+WHERE age_quartile IN (1, 3)
+GROUP BY age_quartile
+       
+
+--- Outlier test 1 
+select 
+    quartile, 
+    max(total_miles) as quartile_break
+from 
+( 
+select --EXTRACT(day FROM tpep_pickup_datetime AT TIME ZONE "UTC") as day,
+       round(trip_distance,2) as total_miles, 
+       ntile(4) over (order by trip_distance) quartile
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+--group by day
+) a 
+where quartile in (1,3) 
+group by quartile
+
+
+
+
+select 
+    quartile, 
+    max(total_miles) as quartile_break
+from 
+( 
+select EXTRACT(day FROM tpep_pickup_datetime AT TIME ZONE "UTC") as day,
+       round(sum(trip_distance),2) as total_miles, 
+       ntile(4) over (order by sum(trip_distance)) quartile
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+group by day
+) a 
+where quartile in (1,3) 
+group by quartile
+
+select * 
+from `new-york-taxi-trips-342523.taxi_project.trip_data_altered`
+
+
+
+/*253458.31 - 132741.38 = 120,716.93 -- IQR 
+120,716.93 * 1.5 = 181,075.395 - outlier identifier
+
+Q1 
+132741.38 - 181,075.395 = -48334.015
+
+Q3 
+253458.31 + 181,075.395 = 434533.705
+*/
+
+
+SELECT full_name,
+age
+FROM friends
+WHERE age < 25 OR age > 41
+
+select EXTRACT(day FROM tpep_pickup_datetime AT TIME ZONE "UTC") as day,
+       round(sum(trip_distance),2) as total_miles
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+group by day
+having total_miles > 48334.015 and total_miles < 434533.705
+
+
+
+---Final Query -- 
+select 
+    COALESCE(VendorID, 3) as VendorID,* 
+    TIMESTAMP_DIFF(tpep_dropoff_datetime, tpep_pickup_datetime,  minute) as trip_duration 
+
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+having total_miles > 48334.015 and total_miles < 434533.705
+
+
+select COALESCE(VendorID, 3) as VendorID, 
+    TIMESTAMP_DIFF(tpep_dropoff_datetime, tpep_pickup_datetime,  minute) as trip_duration, 
+    tpep_pickup_datetime,
+    tpep_dropoff_datetime,
+    passenger_count,
+    trip_distance,
+    RatecodeID,
+    store_and_fwd_flag,
+    PULocationID,
+    DOLocationID,
+    payment_type,
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    improvement_surcharge,
+    total_amount,
+    congestion_surcharge
+from `new-york-taxi-trips-342523.taxi_project.trip_data`
+where tpep_pickup_datetime >= '2021-01-01 00:00:00 UTC'and	tpep_dropoff_datetime >= '2021-01-01 00:00:00 UTC' and VendorID != 3 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- EDA 
+-- 
