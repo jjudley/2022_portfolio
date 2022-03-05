@@ -13,8 +13,7 @@ select * from `new-york-taxi-trips-342523.taxi_project.trip_data` limit 10
 -- Business Question 
 
 -- maximize total amount received per ride
--- pickup passengers at popular lcoatiosn 
-
+-- pickup passengers at popular lcoations to maximize time spent on the road
 
 -- Data Cleaning 
 
@@ -220,12 +219,6 @@ where congestion_surcharge is null
 -- 
 select * from `new-york-taxi-trips-342523.taxi_project.trip_data`
 
-select distinct RatecodeID  
-from `new-york-taxi-trips-342523.taxi_project.trip_data`
-
-
-
-
 
 -- Range of values-- 
 
@@ -256,49 +249,11 @@ from `new-york-taxi-trips-342523.taxi_project.trip_data`
 
 
 
-
-
-
 ---- Identify Outliers ---- 
 -- trip_distance, total_amount
 
 
 -- Outlier in trip distance by day 
-
-
-
-
-
-
-SELECT
-	age_quartile,
-	MAX(age) AS quartile_break
-FROM(
-	SELECT
-    	full_name,
-		age,
-		NTILE(4) OVER (ORDER BY age) AS age_quartile
-	FROM friends) AS quartiles
-WHERE age_quartile IN (1, 3)
-GROUP BY age_quartile
-       
-
---- Outlier test 1 
-select 
-    quartile, 
-    max(total_miles) as quartile_break
-from 
-( 
-select --EXTRACT(day FROM tpep_pickup_datetime AT TIME ZONE "UTC") as day,
-       round(trip_distance,2) as total_miles, 
-       ntile(4) over (order by trip_distance) quartile
-from `new-york-taxi-trips-342523.taxi_project.trip_data`
---group by day
-) a 
-where quartile in (1,3) 
-group by quartile
-
-
 
 
 select 
@@ -320,6 +275,8 @@ from `new-york-taxi-trips-342523.taxi_project.trip_data_altered`
 
 
 
+-- Computing Interquartile Range 
+
 /*253458.31 - 132741.38 = 120,716.93 -- IQR 
 120,716.93 * 1.5 = 181,075.395 - outlier identifier
 
@@ -331,10 +288,6 @@ Q3
 */
 
 
-SELECT full_name,
-age
-FROM friends
-WHERE age < 25 OR age > 41
 
 select EXTRACT(day FROM tpep_pickup_datetime AT TIME ZONE "UTC") as day,
        round(sum(trip_distance),2) as total_miles
@@ -375,20 +328,3 @@ select COALESCE(VendorID, 3) as VendorID,
 from `new-york-taxi-trips-342523.taxi_project.trip_data`
 where tpep_pickup_datetime >= '2021-01-01 00:00:00 UTC'and	tpep_dropoff_datetime >= '2021-01-01 00:00:00 UTC' and VendorID != 3 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- EDA 
--- 
